@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="夏季小学期时实践课程" charset="utf-8" content="content">
+	<title>用户注册界面</title>
+</head>
+<body>
+	{% if message %}
+		<p style="color:red">{{ message }}</p>
+	{% endif %}
+
+	<form action="/signin" method="post">
+    	<legend>Sign In: </legend>
+    	<p>用户名:{{ form.userName(placeholder='yourUsername') }}</p>
+    	<p>邮箱:{{ form.email(placeholder='yourname@email.com') }}</p>
+    	<p>密码:{{ form.password(placeholder='yourpassword') }}</p>
+    	<p>{{ form.csrf_token }}</p>
+
+    	<p><input type="submit" value="Sign In"></p>
+	</form>
+
+</body>
+</html>
