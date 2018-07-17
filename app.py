@@ -1,5 +1,19 @@
-from flask import Flask
+from flask import Flask, request
+import mail
 
 app = Flask(__name__)
 
-app.run(host='zlbweb.cn', port=443, ssl_context=('cert.pem', 'key.pem'))
+
+@app.route('/test_mail')
+def test_mail():
+    email = request.args.get('email')
+    return mail.test_mail(email)
+
+
+def main():
+    mail.init(app)
+    app.run(host='zlbweb.cn', port=443, ssl_context=('cert.pem', 'key.pem'))
+
+
+if __name__ == "__main__":
+    main()
