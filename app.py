@@ -11,7 +11,7 @@ def test_mail():
     return mail.test_mail(email)
 
 
-@app.route('/upload_file', method=['POST'])
+@app.route('/upload_file', methods=['POST'])
 def upload_file():
     # f = 要上传的文件
     # file.upload_file(f)
