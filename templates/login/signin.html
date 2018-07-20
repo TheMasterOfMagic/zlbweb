@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="登陆界面" charset="utf-8" content="content">
+	<link rel="stylesheet" type="text/css" href="../../static/css/login.css">
+	<title>登陆界面</title>
+</head>
+<body>
+	<div id = "title">
+		<p>夏季小学期实践</p>
+	</div>
+
+	<div id = "main">
+
+		<div id = "showimage">
+			<h1>预留区域</h1>
+		</div>
+		
+		<div id = "login">
+			{% if message %}
+			<p style="color:red">{{ message }}</p>
+			{% endif %}
+
+			<form action="/signup" method="post">
+
+	    		<legend>Sign Up: </legend>
+
+		    	<p>邮箱:{{ form.email(placeholder='yourname@email.com') }}</p>
+		    	<p>密码:{{ form.password(placeholder='yourpassword') }}</p>
+		    	<p>{{ form.csrf_token }}</p>
+
+	    		<p><input type="submit" value="Sign Up"></p>
+			</form>
+		</div>
+		
+	</div>
+	
+</body>
+</html>

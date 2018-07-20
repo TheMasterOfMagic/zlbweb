@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="上传文件页面" charset="utf-8" content="content">
+    <title>上传文件页面</title>
+</head>
+<body>
+
+<h1>选择要上传的文件</h1>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <p>{{ form.watermark }}</p>
+    <p>File: {{ form.image }}</p>
+    <p>{{ form.csrf_token }}</p>
+
+    <input type="submit" value="Submit">
+</form>
+<a href="{{ url_for('signoff') }}">Sign Off</a>
+
+</body>
+</html>

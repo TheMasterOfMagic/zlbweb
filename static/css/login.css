@@ -1,0 +1,34 @@
+#title{
+	background: white;
+	height: 70px;
+	width:100%;
+	background-position: top;
+	margin: 0 auto;
+	padding: 0 ;
+	border-width: 0;
+}
+
+#title p{
+	display: block;
+	font-size:30px;
+	padding-left: 10%;
+	padding-top:0;
+}
+#showimage {
+	width:50%;
+	margin: 0 ;
+	padding: 0 ;
+	display:inline-block ; 
+}
+
+#login {
+	width:40%;
+	margin: 0 ;
+	padding: 0 ;
+	display:inline-block ; 
+}
+
+body{
+	margin: 0 auto;
+	padding: 0 ;
+}
