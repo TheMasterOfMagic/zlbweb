@@ -1,3 +1,7 @@
 .idea/
 __pycache__/
 config.py
+forms/__pycache__/
+instance
+templates/login/debug.log
+templates/upload/debug.log

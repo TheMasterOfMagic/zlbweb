@@ -1,0 +1,31 @@
+body{
+	padding: 0 ;
+	margin: 0 auto;
+}
+
+#title{
+	background: white;
+	height: 70px;
+	width:100%;
+	background-position: top;
+	margin: 0 auto;
+	padding: 0 ;
+	border-width: 0;
+	background-color: red;
+}
+
+#title p{
+	display: block;
+	font-size:30px;
+	padding-left: 10%;
+	padding-top:0;
+}
+
+#showimage{
+	padding: 0;
+	margin: 0;
+	display: inline-block;
+	width:100%;
+	height: 100%;
+	background-color: yellow;
+}
