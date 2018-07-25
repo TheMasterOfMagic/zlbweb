@@ -1,14 +1,14 @@
 from flask import render_template, redirect, url_for, flash
 from forms.upload_form import CheckFile
 import os
+import config
 
 app = None
 upload_dir = None  # 文件上传/下载路径
 filelist = None
 
-ALLOWED_EXTENSIONS = ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'rtf', 'txt',
-                      'pdf', 'png', 'bmp', 'jpg']  # 允许上传的文件格式
-ALLOWED_FILE_SIZE = 10 * 1024 * 1024  # 允许上传的文件大小MB
+ALLOWED_EXTENSIONS = config.ALLOWED_EXTENSIONS  # 允许上传的文件格式
+ALLOWED_FILE_SIZE = config.ALLOWED_FILE_SIZE  # 允许上传的文件大小MB
 
 
 def init(_app):
@@ -52,5 +52,5 @@ def upload_file():
 
 def file_list():  # 文件下载
     for parent, dirname, filenames in os.walk(upload_dir):
-        filelist = filenames
+        filelist = next(os.walk(upload_dir))[-1]
     return filelist

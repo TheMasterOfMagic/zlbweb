@@ -11,6 +11,6 @@ class LoginForm(FlaskForm):
     # 密码必须包含大写、小写、数字，且至少出现一次
     password = PasswordField('password', validators=[DataRequired(), Length(min=8, max=32),
                                                      Regexp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$', 0,
-                                                            "密码长度限制在3~36之间且密码不能为弱密码"),
+                                                            "密码长度限制在8~36之间且密码不能为弱密码"),
                                                      EqualTo('confirmpassword', message='Passwords must match')], )
     confirmpassword = PasswordField('confirmpassword')

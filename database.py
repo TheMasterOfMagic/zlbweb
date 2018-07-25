@@ -12,11 +12,6 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.secretinfo['SQLALCHEMY_TRACK_MODIFICATIONS']
     db.init_app(app)
 
-    with app.app_context():
-        from models import User
-        db.create_all()
-        db.session.merge(User(id=0,username="lycheng", email='anjing@cuc.edu.cn', password='aB8'))
-        db.session.commit()
     return app
 
 def add_user(user,userID):

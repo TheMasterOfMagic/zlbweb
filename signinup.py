@@ -22,7 +22,7 @@ def signin_User():
 
             # #使用sha512进行hash
             hash = hashlib.sha512()
-            hash.update(form.password.data.encode('utf-8'))
+            hash.update(form.password.data.encode())
             form.password.data = hash.hexdigest()
 
             id = (User.query.order_by((User.id).desc()).first()).id + 1
