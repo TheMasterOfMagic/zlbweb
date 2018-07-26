@@ -1,8 +1,8 @@
-
 import sys
 from Crypto.Cipher import AES
 from binascii import b2a_hex, a2b_hex
 import rsa
+
 
 class prpcrypt():
     def __init__(self, key):
@@ -31,7 +31,8 @@ class prpcrypt():
         plain_text = cryptor.decrypt(a2b_hex(text))
         return plain_text.rstrip(('\0').encode())
 
-def encryption_file(filepath):
+
+def encryption_file(filedata):
     with open('./static/secret/publickey.txt', 'rb') as f:  # 以二进制写类型打开
         publicKey = (f.read()).decode()
 
@@ -39,49 +40,44 @@ def encryption_file(filepath):
         para1 = publicKey[10:-8]
         para2 = publicKey[-6:-1]
 
-        #公钥初始化
-        publicKey = rsa.key.PublicKey(int(para1),int(para2))
-
+        # 公钥初始化
+        publicKey = rsa.key.PublicKey(int(para1), int(para2))
 
     with open('./static/secret/privatekey.txt', 'rb') as f:  # 以二进制写类型打开
         privateKey = (f.read()).decode()
 
         # 解析字符串转换为私钥所需的五个参数（n,e,d,p,q）
-        para3 = privateKey[len(para1)+len(para2)+15:-1]
+        para3 = privateKey[len(para1) + len(para2) + 15:-1]
         para4 = para3[:-908]
         para3 = para3[-906:]
-        para3,para4 = para4,para3
+        para3, para4 = para4, para3
         para5 = para4[:480]
         para4 = para4[482:]
-        para4,para5 = para5,para4
+        para4, para5 = para5, para4
 
-        #私钥初始化
-        privateKey = rsa.key.PrivateKey(int(para1),int(para2),int(para3),int(para4),int(para5))
-
+        # 私钥初始化
+        privateKey = rsa.key.PrivateKey(int(para1), int(para2), int(para3), int(para4), int(para5))
 
     # 获得对称密钥
     with open('./static/secret/symmetrickey.txt', 'rb') as f:  # 以二进制写类型打开
         secretkey = f.read()
         message = rsa.decrypt(secretkey, privateKey)
 
-
-    #采用AES_CBC模式加密
+    # 采用AES_CBC模式加密
     secretkey = message
     pc = prpcrypt(secretkey)  # 初始化密钥
 
     # 加密操作
-    file = open('E:/大学/大二下/更新操作.PNG', 'rb').read()
-    e = pc.encrypt(file)
-    with open('E:/大学/大二下/1.PNG', 'wb') as f:  # 以二进制写类型打开
-        f.write(e)  # 写入文件
+    return pc.encrypt(filedata)
+
+    # file = open('E:/大学/大二下/更新操作.PNG', 'rb').read()
+    # e = pc.encrypt(file)
+    # with open('E:/大学/大二下/1.PNG', 'wb') as f:  # 以二进制写类型打开
+    #     f.write(e)  # 写入文件
 
     # # 解密操作
     # file = open('E:/大学/大二下/1.PNG', 'rb').read()
     # d = pc.decrypt(file)
     # with open('E:/大学/大二下/2.PNG', 'wb') as f:  # 以二进制写类型打开
     #     f.write(d)  # 写入文件
-
-if __name__ == '__main__':
-    encryption_file("d")
-
 

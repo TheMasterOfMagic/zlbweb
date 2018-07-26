@@ -25,7 +25,11 @@ def signin_User():
             hash.update(form.password.data.encode())
             form.password.data = hash.hexdigest()
 
-            id = (User.query.order_by((User.id).desc()).first()).id + 1
+            try:
+                id = (User.query.order_by((User.id).desc()).first()).id + 1
+            except AttributeError:
+                id = 0
+
             add_user(form, id)
             next = request.args.get('next')
             return redirect(next or url_for('upload'))

@@ -18,3 +18,10 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+class FileHash(db.Model,UserMixin):
+    __tablename__ = 'FileHash'
+
+    filename = db.Column(db.String(50), primary_key=True)
+    hash = db.Column(db.String(512))
+

@@ -102,8 +102,11 @@ def upload():
 @app.route('/file_list', methods=['GET', 'POST'])
 def file_list():
     filelist = file.file_list()
-    return file.download_file(filelist)
+    return filelist
 
+@app.route('/download/<path:filename>', methods=['GET', 'POST'])
+def download(filename):
+    return file.download(filename)
 
 def main():
     mail.init(app)

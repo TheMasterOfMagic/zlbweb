@@ -11,7 +11,9 @@
 	</div>
 
 	<div id="showimage">
-		<p>title</p>
+		{% if message %}
+		<p style="color:red">{{ message }}</p>
+		{% endif %}
 	</div>
 </body>
 </html>
