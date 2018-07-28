@@ -2,6 +2,7 @@ import sys
 from Crypto.Cipher import AES
 from binascii import b2a_hex, a2b_hex
 import rsa
+import os
 
 
 class prpcrypt():
@@ -81,3 +82,114 @@ def encryption_file(filedata):
     # with open('E:/大学/大二下/2.PNG', 'wb') as f:  # 以二进制写类型打开
     #     f.write(d)  # 写入文件
 
+
+def decryption_file(filedata):
+    with open('./static/secret/publickey.txt', 'rb') as f:  # 以二进制写类型打开
+        publicKey = (f.read()).decode()
+
+        # 将获取得到的字符串转化为公钥所需参数(n,e)
+        para1 = publicKey[10:-8]
+        para2 = publicKey[-6:-1]
+
+        # 公钥初始化
+        publicKey = rsa.key.PublicKey(int(para1), int(para2))
+
+    with open('./static/secret/privatekey.txt', 'rb') as f:  # 以二进制写类型打开
+        privateKey = (f.read()).decode()
+
+        # 解析字符串转换为私钥所需的五个参数（n,e,d,p,q）
+        para3 = privateKey[len(para1) + len(para2) + 15:-1]
+        para4 = para3[:-908]
+        para3 = para3[-906:]
+        para3, para4 = para4, para3
+        para5 = para4[:480]
+        para4 = para4[482:]
+        para4, para5 = para5, para4
+
+        # 私钥初始化
+        privateKey = rsa.key.PrivateKey(int(para1), int(para2), int(para3), int(para4), int(para5))
+
+    # 获得对称密钥
+    with open('./static/secret/symmetrickey.txt', 'rb') as f:  # 以二进制写类型打开
+        secretkey = f.read()
+        message = rsa.decrypt(secretkey, privateKey)
+
+    # 采用AES_CBC模式加密
+    secretkey = message
+    pc = prpcrypt(secretkey)  # 初始化密钥
+
+    # 解密操作
+    file = open(filedata, 'rb').read()
+    return pc.decrypt(file)
+
+
+# 对加密后的数据进行签名，参数为已经加密但未签名的文件
+def sign_file(filedata):
+    with open('./static/secret/publickey.txt', 'rb') as f:  # 以二进制写类型打开
+        publicKey = (f.read()).decode()
+
+        # 将获取得到的字符串转化为公钥所需参数(n,e)
+        para1 = publicKey[10:-8]
+        para2 = publicKey[-6:-1]
+
+        # 公钥初始化
+        publicKey = rsa.key.PublicKey(int(para1), int(para2))
+
+    with open('./static/secret/privatekey.txt', 'rb') as f:  # 以二进制写类型打开
+        privateKey = (f.read()).decode()
+
+        # 解析字符串转换为私钥所需的五个参数（n,e,d,p,q）
+        para3 = privateKey[len(para1) + len(para2) + 15:-1]
+        para4 = para3[:-908]
+        para3 = para3[-906:]
+        para3, para4 = para4, para3
+        para5 = para4[:480]
+        para4 = para4[482:]
+        para4, para5 = para5, para4
+
+        # 私钥初始化
+        privateKey = rsa.key.PrivateKey(int(para1), int(para2), int(para3), int(para4), int(para5))
+
+    # 获得对称密钥
+    with open('./static/secret/symmetrickey.txt', 'rb') as f:  # 以二进制写类型打开
+        secretkey = f.read()
+        message = rsa.decrypt(secretkey, privateKey)
+
+    # 采用AES_CBC模式加密
+    secretkey = message
+    pc = prpcrypt(secretkey)  # 初始化密钥
+
+    # 使用对称密钥加密数据
+    endata = pc.encrypt(filedata)
+    # 对加密的数据进行签名
+    return rsa.sign(endata, privateKey, 'SHA-1')
+
+
+# 验证签名，参数为签名后的文件和未签名的文件
+def verify_file(signfile, filedata):
+    with open('./static/secret/publickey.txt', 'rb') as f:  # 以二进制写类型打开
+        publicKey = (f.read()).decode()
+
+        # 将获取得到的字符串转化为公钥所需参数(n,e)
+        para1 = publicKey[10:-8]
+        para2 = publicKey[-6:-1]
+
+        # 公钥初始化
+        publicKey = rsa.key.PublicKey(int(para1), int(para2))
+
+    with open('./static/secret/privatekey.txt', 'rb') as f:  # 以二进制写类型打开
+        privateKey = (f.read()).decode()
+
+        # 解析字符串转换为私钥所需的五个参数（n,e,d,p,q）
+        para3 = privateKey[len(para1) + len(para2) + 15:-1]
+        para4 = para3[:-908]
+        para3 = para3[-906:]
+        para3, para4 = para4, para3
+        para5 = para4[:480]
+        para4 = para4[482:]
+        para4, para5 = para5, para4
+
+        # 私钥初始化
+        privateKey = rsa.key.PrivateKey(int(para1), int(para2), int(para3), int(para4), int(para5))
+
+        return rsa.verify(filedata, signfile, publicKey)

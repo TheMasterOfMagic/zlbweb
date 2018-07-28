@@ -39,11 +39,16 @@ def upload_file():
     # database.add_filehash("test","lycheng")
     if form.validate_on_submit():
         f = form.image.data
-        size = len(f.read())
+        path = os.path.join(upload_dir, f.filename)
+        data=f.read()
+        size = len(data)
         if allowed_file(f.filename):
             if allowed_size(size):
-                f.seek(0)
-                f.save(os.path.join(upload_dir, f.filename))
+                data_encryption=encryption.encryption_file(data)
+                file=open(path,'w')
+                file.write(data_encryption.decode())
+                file.close()
+                #f.save(os.path.join(upload_dir, f.filename))
                 flash('Upload success。')
                 return redirect(url_for('upload'))
             else:
@@ -56,7 +61,11 @@ def file_list():  # 返回已经上传的文件列表
     name=''
     for parent, dirname, filenames in os.walk(upload_dir):
         filelist = filenames
-    return render_template('./upload/download.html', message=filelist)
+    return str(filelist)
 
 def download(filename):
-    return send_from_directory(upload_dir, filename, mimetype='application/octet-stream')
+    path=os.path.join(upload_dir,filename)
+    d=encryption.decryption_file(path)
+    with open(os.path.join('./instance/download',filename),'wb') as file:
+        file.write(d)
+    return send_from_directory('./instance/download', filename, mimetype='application/octet-stream')

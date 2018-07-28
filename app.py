@@ -4,6 +4,7 @@ import file
 from flask import render_template, redirect, url_for, request
 from forms.signin_form import LoginForm
 from forms.signup_form import RegisterForm
+from forms.dowmload_form import DownloadForm
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from werkzeug.exceptions import HTTPException, NotFound
 from flask_login import LoginManager, login_required, login_user, logout_user
@@ -99,13 +100,22 @@ def upload():
     f = file.upload_file()
     return f
 
-@app.route('/file_list', methods=['GET', 'POST'])
-def file_list():
+# 文件下载页面
+@app.route('/filedownload', methods=['GET'])
+def filedownload():
+    form = DownloadForm()
+    return render_template('./upload/download.html',form=form)
+
+@app.route('/filelist', methods=['GET','POST'])
+def filelist():
     filelist = file.file_list()
     return filelist
 
-@app.route('/download/<path:filename>', methods=['GET', 'POST'])
-def download(filename):
+
+@app.route('/download', methods=['GET', 'POST'])
+def download():
+    form = DownloadForm()
+    filename = form.filename.data
     return file.download(filename)
 
 def main():

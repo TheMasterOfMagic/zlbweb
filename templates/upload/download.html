@@ -3,17 +3,54 @@
 <head>
 	<meta name="文件下载页面" charset="utf-8" content="content">
 	<link rel="stylesheet" type="text/css" href="../../static/css/download.css">
+	<script src="../../static/js/lib/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
 	<title>文件下载页面</title>
 </head>
+<script>
+	$(document).ready(function(){
+		$("button").click(function(){
+			$.get("/filelist",function(data){
+				var show = '';
+				var message = data.slice(1,-1);
+				var filelist = message.split(",");
+				for (var i=0;i<filelist.length;i++)
+				{
+					show += "<p>" + filelist[i] + "</p>"; 
+				}
+				document.getElementById('msg').innerHTML=show;
+			});
+		});
+	});
+</script>
 <body>
 	<div id="title">
-		<p>选择你要下载的页面</p>
+		<p>选择你要下载的文件</p>
 	</div>
+	
+	<div id = "downloadfile">
+			<form name="file_form" action="/download" method="post" >
+
+    			<legend>File Name: </legend>
+
+		    	<p id = "filename" >文件名:{{ form.filename(placeholder='filename') }}</p>
+
+		    	<p>{{ form.csrf_token }}</p>
+
+		    	<p><input type="submit" value="确认"></p>
+			</form>
+		</div>
+
 
 	<div id="showimage">
-		{% if message %}
-		<p style="color:red">{{ message }}</p>
-		{% endif %}
+		<button type="">显示当前可供下载的文件</button>
+
+		<div id = "msg">
+			<!-- <p style="color:red" id = "msg"> message </p>
+			{% if message %}
+			<p style="color:red">{{ message }}</p>
+			{% endif %} -->
+		</div>
+		
 	</div>
 </body>
 </html>

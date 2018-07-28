@@ -3,6 +3,12 @@ body{
 	margin: 0 auto;
 }
 
+p{
+	padding: 0;
+	margin: 0;
+}
+
+
 #title{
 	background: white;
 	height: 70px;
@@ -28,4 +34,13 @@ body{
 	width:100%;
 	height: 100%;
 	background-color: yellow;
+}
+
+#downloadfile{
+	padding: 0;
+	margin: 0;
+	display: inline-block;
+	background-color: blue;
+	width:100%;
+
 }
