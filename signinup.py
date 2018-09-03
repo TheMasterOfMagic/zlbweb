@@ -43,12 +43,14 @@ def signup_User():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
 
-        # 检测密码是否正确
-        hash = hashlib.sha512()
-        # 将盐值和密码进行拼接
-        hashpassword = user.salt + form.password.data.encode()
-        hash.update(hashpassword)
-        resulthash = hash.hexdigest()
+        resulthash = ""
+        if user is not None:
+            # 检测密码是否正确
+            hash = hashlib.sha512()
+            # 将盐值和密码进行拼接
+            hashpassword = user.salt + form.password.data.encode()
+            hash.update(hashpassword)
+            resulthash = hash.hexdigest()
 
         if user is not None and user.verify_password(resulthash):
             # 启动用户登录
