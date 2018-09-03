@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Email, Length, Regexp, EqualTo
+from os import urandom
 
 
 class LoginForm(FlaskForm):
@@ -14,3 +15,4 @@ class LoginForm(FlaskForm):
                                                             "密码长度限制在8~36之间且密码不能为弱密码"),
                                                      EqualTo('confirmpassword', message='Passwords must match')], )
     confirmpassword = PasswordField('confirmpassword')
+    salt = (urandom(64)).decode("utf8","ignore")

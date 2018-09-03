@@ -6,3 +6,4 @@ instance
 templates/login/debug.log
 templates/upload/debug.log
 static/secret/
+example.db

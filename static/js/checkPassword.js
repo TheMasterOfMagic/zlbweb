@@ -83,13 +83,13 @@ function hashPassword(){
 
     var formData = new FormData(document.forms.namedItem("login_form"));
     
-    // sha512加密过程
-    var hash = sha512.create();
-    hash.update(password);
-    afterhash = hash.hex();
+    // // sha512加密过程
+    // var hash = sha512.create();
+    // hash.update(password);
+    // afterhash = hash.hex();
 
-    //表单中password的值用hash值代替
-    formData.set('password',afterhash);
+    // //表单中password的值用hash值代替
+    // formData.set('password',afterhash);
 
     // 通过jquery发送出去
     $.ajax({

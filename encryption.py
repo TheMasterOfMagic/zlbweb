@@ -71,17 +71,6 @@ def encryption_file(filedata):
     # 加密操作
     return pc.encrypt(filedata)
 
-    # file = open('E:/大学/大二下/更新操作.PNG', 'rb').read()
-    # e = pc.encrypt(file)
-    # with open('E:/大学/大二下/1.PNG', 'wb') as f:  # 以二进制写类型打开
-    #     f.write(e)  # 写入文件
-
-    # # 解密操作
-    # file = open('E:/大学/大二下/1.PNG', 'rb').read()
-    # d = pc.decrypt(file)
-    # with open('E:/大学/大二下/2.PNG', 'wb') as f:  # 以二进制写类型打开
-    #     f.write(d)  # 写入文件
-
 
 def decryption_file(filedata):
     with open('./static/secret/publickey.txt', 'rb') as f:  # 以二进制写类型打开
@@ -119,8 +108,9 @@ def decryption_file(filedata):
     pc = prpcrypt(secretkey)  # 初始化密钥
 
     # 解密操作
-    file = open(filedata, 'rb').read()
-    return pc.decrypt(file)
+    with open(filedata, 'rb') as file:
+        d = pc.decrypt(file.read())
+    return d
 
 
 # 对加密后的数据进行签名，参数为已经加密但未签名的文件
@@ -156,13 +146,15 @@ def sign_file(filedata):
         message = rsa.decrypt(secretkey, privateKey)
 
     # 采用AES_CBC模式加密
-    secretkey = message
-    pc = prpcrypt(secretkey)  # 初始化密钥
+    # secretkey = message
+    # pc = prpcrypt(secretkey)  # 初始化密钥
 
     # 使用对称密钥加密数据
-    endata = pc.encrypt(filedata)
+    # endata = pc.encrypt(filedata)
+    print('filedata=',len(filedata))
+    print('endata=',len(filedata))
     # 对加密的数据进行签名
-    return rsa.sign(endata, privateKey, 'SHA-1')
+    return rsa.sign(filedata, privateKey, 'SHA-1')
 
 
 # 验证签名，参数为签名后的文件和未签名的文件
@@ -191,5 +183,4 @@ def verify_file(signfile, filedata):
 
         # 私钥初始化
         privateKey = rsa.key.PrivateKey(int(para1), int(para2), int(para3), int(para4), int(para5))
-
-        return rsa.verify(filedata, signfile, publicKey)
+    return rsa.verify(filedata, signfile, publicKey)

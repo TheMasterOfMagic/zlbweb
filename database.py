@@ -23,7 +23,7 @@ def create_app():
 
 def add_user(user, userID):
     from models import User
-    db.session.add(User(id=userID, username=user.userName.data, email=user.email.data, password=user.password.data))
+    db.session.add(User(id=userID, username=user.userName.data, email=user.email.data, password=user.password.data, salt=user.salt.encode()))
     db.session.commit()
 
 

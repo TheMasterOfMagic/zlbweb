@@ -6,10 +6,7 @@ from forms.signin_form import LoginForm
 from forms.signup_form import RegisterForm
 from forms.dowmload_form import DownloadForm
 from flask_wtf.csrf import CSRFProtect, CSRFError
-from werkzeug.exceptions import HTTPException, NotFound
-from flask_login import LoginManager, login_required, login_user, logout_user
-
-import os
+from flask_login import LoginManager, login_required, login_user, logout_user,current_user
 import config
 
 from database import create_app, add_user
@@ -19,6 +16,7 @@ import signinup
 app = create_app()
 # 防止跨站脚本攻击
 app.secret_key = config.secretinfo['secret_key']
+app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  # 20MB
 # app.config['WTF_CSRF_SECRET_KEY'] = 'CSRFTokenGeneratorSecretKey2018' # CSRF Token生成器的签发密钥
 # app.config['WTF_CSRF_TIME_LIMIT'] = 10 # 表单提交限时1分钟，超时则触发CSRF Token校验失败错误
 csrf = CSRFProtect(app)
@@ -31,10 +29,10 @@ login_manager.login_message = config.secretinfo['login_manager_login_message']
 login_manager.login_message_category = config.secretinfo['login_manager_login_message_category']
 login_manager.init_app(app)
 
-
 @login_manager.user_loader
 def load_user(userid):
-    return User.query.get(int(userid))
+    #return User.query.get(int(userid))
+    return User.query.filter_by(id=userid).first()
 
 
 @app.route('/')
@@ -47,7 +45,7 @@ def index():
 @login_required
 def signoff():
     logout_user()
-    return 'Logged out successfully!'
+    return redirect(url_for('index'))
 
 
 # ----------------------------------------------------注册部分的代码-----------------------------------
@@ -91,14 +89,10 @@ def test_mail():
 @app.route('/upload_file', methods=['GET', 'POST'])
 @login_required
 def upload_file():
-    return file.upload_file()
-
-
-# =======
-@app.route('/upload', methods=['GET', 'POST'])
-def upload():
-    f = file.upload_file()
+    print(current_user.is_anonymous)
+    f=file.upload_file()
     return f
+
 
 # 文件下载页面
 @app.route('/filedownload', methods=['GET'])
@@ -116,7 +110,10 @@ def filelist():
 def download():
     form = DownloadForm()
     filename = form.filename.data
-    return file.download(filename)
+    print(current_user.is_authenticated)
+    if current_user.is_authenticated:
+        return file.download(filename)
+    return file.download_anonmity(filename)
 
 def main():
     mail.init(app)

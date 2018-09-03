@@ -17,7 +17,7 @@
 </ul>
 {% endif %}
 {% endwith %}
-<form action="/upload" method="post" enctype="multipart/form-data">
+<form action="/upload_file" method="post" enctype="multipart/form-data">
     <p>{{ form.watermark }}</p>
     <p>File: {{ form.image }}</p>
     <p>{{ form.csrf_token }}</p>
