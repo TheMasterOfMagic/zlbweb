@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="登陆界面" charset="utf-8" content="content">
+	<link rel="stylesheet" type="text/css" href="../../static/css/login.css">
+	<script type="text/javascript" src="../../static/js/checkPassword.js"></script>
+	<script src="../../static/js/lib/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../static/js/lib/sha512.min.js" type="text/javascript" charset="utf-8"></script>
+	<title>登陆界面</title>
+</head>
+<body>
+	<div id = "title">
+		<p>夏季小学期实践</p>
+	</div>
+
+	<div id = "main">
+
+		<div id = "showimage">
+			<h1>预留区域</h1>
+		</div>
+		
+		<div id = "login">
+			{% if message %}
+			<p style="color:red">{{ message }}</p>
+			{% endif %}
+
+			<form name="login_form" action="/signup" method="post">
+
+	    		<legend>Sign Up: </legend>
+
+				邮箱：<input id="email" type="text" placeholder="yourname@email.com" required name="email" /><br>
+    			密码：<input id="password" type="password" placeholder="yourpassword" required name="password" /><br>
+	
+		    	<!-- <p>邮箱:{{ form.email(placeholder='yourname@email.com') }}</p>
+		    	<p>密码:{{ form.password(placeholder='yourpassword') }}</p> -->
+		    	<p>{{ form.csrf_token }}</p>
+
+	    		<!-- <p><input type="submit" value="Sign Up"></p> -->
+			</form>
+			<button id="btn_submit" onclick="hashPassword()">Submit</button>
+		</div>
+		
+	</div>
+	<a href="{{ url_for('filedownload') }}">Download</a><br>
+</body>
+</html>

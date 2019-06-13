@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name = "注册界面" charset="utf-8" content="content">
+	<link rel="stylesheet" type="text/css" href="../../static/css/login.css">
+	<script type="text/javascript" src="../../static/js/checkPassword.js"></script>
+	<script src="../../static/js/lib/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<title>用户注册界面</title>
+
+</head>
+<body>
+	
+	<div id = "title">
+		<p>夏季小学期实践</p>
+	</div>
+
+	<div id = "main">
+
+		<div id = "showimage">
+			<h1>预留区域</h1>
+		</div>
+		
+		<div id = "login">
+			{% if message %}
+			<p style="color:red">{{ message }}</p>
+			{% endif %}
+
+			<form name="login_form" action="/signin" method="post" >
+
+    			<legend>Sign In: </legend>
+
+    			用户名：<input id="userName" name="userName" placeholder="yourUsername" required type="text" /><br>
+    			邮箱：<input id="email" type="text" placeholder="yourname@email.com" required name="email" /><br>
+    			密码：<input id="password" type="password" placeholder="yourpassword" required name="password" /><br>
+    			再次确认密码：<input id="confirmpassword" type="password" required name="confirmpassword" />
+
+		    	<!-- <p id = "userName" >用户名:{{ form.userName(placeholder='yourUsername') }}</p>
+		    	<p id = "email" >邮箱:{{ form.email(placeholder='yourname@email.com') }}</p>
+		    	<p id = "password" >密码:{{ form.password(placeholder='yourpassword') }}</p>
+		    	<p id = "confirmpassword" >再次确认密码:{{ form.confirmpassword }}</p> -->
+		    	<p>{{ form.csrf_token }}</p>
+
+		    	<!-- <p><input type="submit" value="Sign In"></p> -->
+			</form>
+			<button id="btn-submit" onclick="beforeSubmit()">Submit</button>
+		</div>
+		
+	</div>
+	<a href="{{ url_for('filedownload') }}">Download</a><br>
+</body>
+</html>
